@@ -112,7 +112,6 @@ addRoute('DELETE', '/api/v1/movies/:id', async (req, res, params) => {
   });
 });
 
-// listen to the server on the specified port
 server.listen(PORT, () => {
   console.log(`server started on port: ${PORT}`);
 });
