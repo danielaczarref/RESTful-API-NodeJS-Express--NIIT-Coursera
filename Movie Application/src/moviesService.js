@@ -1,5 +1,5 @@
 const lodash = require("lodash");
-const movieList = require("./db.json").movies;
+const movieList = require('../data/movies.json').movies;
 
 const getMovies = (done) => {
   return done(null, JSON.stringify(movieList))
