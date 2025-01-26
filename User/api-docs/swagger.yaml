@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+  title: User Management API
+  description: An API to manage and retrieve user data.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+paths:
+  /users:
+    get:
+      summary: Retrieve all users
+      description: Returns a list of all users stored in the `users.json` file.
+      tags:
+        - Users
+      responses:
+        '200':
+          description: Successfully retrieved users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request, error retrieving users
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Encountered error while getting users details
+        '500':
+          description: Unexpected system error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unexpected system error; try again later.
+  /users/{userId}:
+    get:
+      summary: Retrieve a user by ID
+      description: Retrieves a single user based on their unique `userId`.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to retrieve.
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Successfully retrieved the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: User not found or bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: User not found.
+        '500':
+          description: Unexpected system error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unexpected system error; try again later.
+    put:
+      summary: Update a user's details
+      description: Updates the `userName` of an existing user based on their `userId`.
+      tags:
+        - Users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the user to update.
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                  description: The new name for the user.
+                  example: Jane Doe
+      responses:
+        '200':
+          description: Successfully updated the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: '#/components/schemas/User'
+        '400':
+          description: User not found or bad request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unable to update user details.
+        '500':
+          description: Unexpected system error
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: Unexpected system error; try again later.
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: Unique ID of the user
+          example: 101
+        userName:
+          type: string
+          description: Name of the user
+          example: John
